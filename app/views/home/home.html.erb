@@ -1,0 +1,5 @@
+<% if current_user %>
+  <%= current_user.name %>
+  <%= image_tag current_user.profile_photo(:large) %>
+  <%= current_user.first_name %>
+<%end%>
