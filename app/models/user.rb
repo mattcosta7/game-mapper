@@ -1,4 +1,8 @@
 class User < ActiveRecord::Base
+  has_many :games_created, foreign_key: :creator_id, class_name: :Game, dependent: :destroy
+  has_many :game_attendees
+  has_many :games_attending, through: :game_attendees, source: :game
+
   def self.from_omniauth(auth)
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
       puts auth.inspect

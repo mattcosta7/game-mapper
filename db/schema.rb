@@ -11,10 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160323155753) do
+ActiveRecord::Schema.define(version: 20160323215130) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "game_attendees", force: :cascade do |t|
+    t.integer  "game_id"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "game_attendees", ["game_id"], name: "index_game_attendees_on_game_id", using: :btree
+  add_index "game_attendees", ["user_id"], name: "index_game_attendees_on_user_id", using: :btree
 
   create_table "games", force: :cascade do |t|
     t.string   "address"
@@ -26,6 +36,8 @@ ActiveRecord::Schema.define(version: 20160323155753) do
     t.integer  "skill_level"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.integer  "creator_id"
+    t.datetime "date"
   end
 
   create_table "users", force: :cascade do |t|
@@ -48,6 +60,11 @@ ActiveRecord::Schema.define(version: 20160323155753) do
     t.string   "age_range"
     t.string   "locale"
     t.string   "about"
+    t.float    "latitude"
+    t.float    "longitude"
+    t.string   "address"
   end
 
+  add_foreign_key "game_attendees", "games"
+  add_foreign_key "game_attendees", "users"
 end

@@ -1,0 +1,63 @@
+<% if current_user %>
+  Welcome, <%=current_user.name%>
+<%end%>
+<%= link_to "Make a New Game", new_game_path %>
+<ul>
+  <% @games.each do |game| %>
+    <li>
+      <%= game.date %>
+      <%= game.sport_name %>
+      <br>
+      <%= game.skill %>
+      <br>
+      Created By: <%= game.creator.name %>
+      <ul>
+        Attendees:
+        <% game.attendees.each do |attendee| %>
+            <li><%=attendee.name%></li>
+        <%end%>
+      </ul>
+    </li>
+  <%end%>
+</ul>
+
+<style>
+  #map {
+    height: 400px;
+    width: 400px;
+  }
+</style>
+
+<div id='map'></div>
+
+<script type="text/javascript">
+  var map,lat,long;
+  function initMap() {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      lat = position.coords.latitude;
+      long = position.coords.longitude;
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: lat, lng: long},
+        scrollwheel: false,
+        zoom: 11
+      });
+      <% @games.each do |game| %>
+        var contentString = "<%=game.display_time%><br><%=game.sport_name%>";
+        var infowindow<%=game.id%> = new google.maps.InfoWindow({
+          content: contentString
+        });
+        var myLatLng = {lat: <%=game.latitude%>, lng: <%=game.longitude%>};
+        var marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map,
+            title: '<%=game.sport_name%>',
+            animation: google.maps.Animation.DROP
+          });
+        google.maps.event.addListener(marker, 'click',function() {
+            infowindow<%=game.id%>.open(map, this);
+         });
+      <%end%>
+    })
+  }
+</script>
+<script src='https://maps.googleapis.com/maps/api/js?key=<%=Rails.application.secrets.gmaps%>&callback=initMap'></script>

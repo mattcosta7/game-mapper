@@ -1,4 +1,12 @@
 class Game < ActiveRecord::Base
+  belongs_to :creator, class_name: :User, foreign_key: :creator_id
+  has_many :game_attendees, dependent: :destroy
+  has_many :attendees, through: :game_attendees, source: :user, dependent: :destroy
+  # before_save :add_location
+  geocoded_by :location
+  after_validation :geocode
+
+  scope :future, -> { select { |x| x if x.date > Time.now }}
   @@skills_list = [
     {
       id: 1,
@@ -61,4 +69,11 @@ class Game < ActiveRecord::Base
     @@sports[self.sport][:name]
   end
 
+  def location
+    self.address + ', ' + self.city + ', ' + self.state
+  end
+
+  def display_time
+    self.date.strftime('%a %b %e, %l:%M %p')
+  end
 end

@@ -1,28 +1,89 @@
-== README
+* Setup Users with omniauth
+  1. Bundle gem
+      gem 'omniauth'
+      gem 'omniauth-facebook'
+  1. config/initializers/omniauth.rb setup
+      info_fields are optional, name,email is default
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+      OmniAuth.config.logger = Rails.logger
 
-Things you may want to cover:
+      Rails.application.config.middleware.use OmniAuth::Builder do
+        provider :facebook, Rails.application.secrets.facebook_client_id, Rails.application.secrets.facebook_client_secret, 
+          {
+            info_fields: 'name,email,bio,birthday,age_range,about,first_name,last_name,locale,location',
+            display: 'popup', 
+            client_options: {
+              ssl: {
+                ca_file: Rails.root.join("cacert.pem").to_s
+              }
+            }
+          }
+      end
 
-* Ruby version
+      #Rails.application.secrets  requires setting in secrets.yml or bash_profile
+  1. generate user model and migration with at least
+      t.string :provider
+      t.string :uid
+      t.string :name
+      t.string :image
+      t.string :token
+      t.datetime :expires_at
+  1. User.rb setup ( self.from_omniauth(auth) )
+  1. routes
+    1.  get 'auth/:provider/callback', to: 'sessions#create'
+        get 'auth/failure', to: redirect('/')
+        get 'signout', to: 'sessions#destroy', as: 'signout'
+        resources :sessions, only: [:create, :destroy]
+        resource :home, only: [:show]
+        root to: "home#show"
+    1. sessions controller
+          def create
+            @user = User.from_omniauth(env["omniauth.auth"])
+            session[:user_id] = @user.id
+            redirect_to root_path
+          end
 
-* System dependencies
+          def destroy
+            session[:user_id] = nil
+            redirect_to root_path
+          end
 
-* Configuration
+  1. login/signout links to application layout view
+        <% if current_user %>
+          Signed in as <strong><%= current_user.name %></strong>!
+          <%= link_to "Sign out", signout_path, id: "sign_out" %>
+        <% else %>
+          <%= link_to "Sign in with Facebook", "/auth/facebook", id: "sign_in" %>
+        <% end %>
+  1. define current_user in application
+      helper_method :current_user
 
-* Database creation
+      def current_user
+        @current_user ||= User.find(session[:user_id]) if session[:user_id]
+      end
+  1. define a photo helper for users, multiple sizes
+      def profile_photo(size='normal')
+        "http://graph.facebook.com/#{self.uid}/picture?type=#{size}"
+      end
 
-* Database initialization
+1. make games model , skill_level, lat, long, address, city, state, sport.  sport and skill level as state machines, creator_id, date
 
-* How to run the test suite
+1. define relationships between users and games.
+    User model
+      has_many :games_created, foreign_key: :creator_id, class_name: :Game
+      has_many :game_attendees
+      has_many :games_attending, through: :game_attendees, source: :game
+    Game model
+      belongs_to :creator, class_name: :User, foreign_key: :creator_id
+      has_many :game_attendees
+      has_many :attendees, through: :game_attendees, source: :user
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+1. add geocoder gem
+    1. bundle
+    1.  geocoded_by :address
+        after_validation :geocode
+        def location
+          self.address + ', ' + self.city + ', ' + self.state
+        end
+1. bring in gmaps javascript
+    1. set initial maps
