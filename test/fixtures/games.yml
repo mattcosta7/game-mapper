@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  address: MyString
+  city: MyString
+  state: MyString
+  latitude: 1.5
+  longitude: 1.5
+  sport: 1
+  skill_level: 1
+
+two:
+  address: MyString
+  city: MyString
+  state: MyString
+  latitude: 1.5
+  longitude: 1.5
+  sport: 1
+  skill_level: 1
