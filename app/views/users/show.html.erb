@@ -1,2 +1,8 @@
-<h1>Users#show</h1>
-<p>Find me in app/views/users/show.html.erb</p>
+<%= @user.name %>
+<%= image_tag @user.profile_photo(:large) %>
+<%= @user.first_name %>
+<% if @user %>
+  Welcome, <%=@user.name%>
+<%end%>
+<%= link_to "Make a New Game", new_game_path %>
+ 

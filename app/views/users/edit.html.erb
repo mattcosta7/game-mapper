@@ -1,2 +1,9 @@
-<h1>Users#edit</h1>
-<p>Find me in app/views/users/edit.html.erb</p>
+<div class='row'>
+  <div class='small-6 large-6 columns'>
+    <%= form_for @user do |f|%>
+      <%= f.text_field :name %>
+      <%= f.number_field :phone %>
+      <%= f.submit%>
+    <%end%>
+  </div>
+</div>

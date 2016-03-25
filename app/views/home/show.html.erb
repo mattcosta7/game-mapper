@@ -1,5 +1,22 @@
 <% if current_user %>
-  <%= current_user.name %>
-  <%= image_tag current_user.profile_photo(:large) %>
-  <%= current_user.first_name %>
+
+  <style>
+    #map {
+      height: 50vh;
+      width: 100%;
+    }
+  </style>
+<div class="row">
+  <div class="small-12 large-12 columns">
+    <div id='map'></div>
+  </div>
+</div>
+<div class="row">
+  <div class="small-12 large-12 columns">
+    <div id='game-detail'></div>
+  </div>
+</div>
+</div>
+  <script src='https://maps.googleapis.com/maps/api/js?key=<%=Rails.application.secrets.gmaps%>&callback=initMap'></script>
+
 <%end%>

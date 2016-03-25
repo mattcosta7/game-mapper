@@ -1,0 +1,28 @@
+<%= form_for @game do |f| %>
+  <div class='field'>
+    <%= f.label :sport %>
+    <%= f.select :sport, options_for_select(Game.sport_options,selected: @game.sport) %>
+  </div>
+  <div class='field'>
+    <%= f.label :skill_level %>
+    <%= f.select :skill_level, options_for_select(Game.skill_options, selected: @game.skill_level ) %>
+  </div>
+  <div class='field'>
+    <%=f.label :date %>
+    <%=f.date_select :date %>
+    <%=f.time_select :date, :ignore_date => true %>
+</div>
+  <div class='field'>
+    <%= f.label :address %>
+    <%= f.text_field :address %>
+  </div>
+  <div class='field'>
+    <%= f.label :city %>
+    <%= f.text_field :city %>
+  </div>
+  <div class='field'>
+    <%= f.label :state %>
+    <%= f.text_field :state %>
+  </div>
+  <%= f.submit  %>
+<%end%>

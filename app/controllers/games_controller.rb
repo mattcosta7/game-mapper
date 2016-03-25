@@ -1,10 +1,18 @@
 class GamesController < ApplicationController
 
   def index
-    if current_user
-      @games = Game.future
-    else
-      @games = Game.all
+    @games = Game.all.by_date.future
+    @game_json = []
+    @games.each do |game|
+      sport_name = {"sport_name" => game.sport_name}
+      skill = {"skill" => game.skill}
+      game = JSON::parse(game.to_json).merge(sport_name).merge(skill)
+      @game_json << game
+    end
+
+    respond_to do |format|
+      format.html
+      format.json {render json: @game_json}
     end
   end
 
@@ -15,6 +23,7 @@ class GamesController < ApplicationController
   def create
     @game = Game.new game_params
     if @game.save
+      @game.attendees << current_user
       redirect_to games_path
     else
       redirect_to :back
@@ -23,6 +32,14 @@ class GamesController < ApplicationController
 
   def show
     @game = Game.find params[:id]
+    attendees = {"attendees" => @game.attendees}
+    sport_name = {"sport_name" => @game.sport_name}
+    skill = {"skill" => @game.skill}
+    @game_json = JSON::parse(@game.to_json).merge(attendees).merge(sport_name).merge(skill)
+    respond_to do |format|
+      format.html
+      format.json {render json: @game_json}
+    end
   end
 
   def edit

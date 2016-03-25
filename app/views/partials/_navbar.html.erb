@@ -1,0 +1,32 @@
+<div class="row">
+  <div class="small-12 large-12 columns">
+    <nav class='top-bar'>
+      <div class='top-bar-left'>
+        <ul class="menu">
+          <li class='menu-text'>
+            <%=link_to 'Home', root_path %>
+          </li>
+        </ul>
+      </div>
+      <div class='top-bar-right'>
+        <% if current_user %>
+          <ul class="dropdown menu" data-dropdown-menu>
+            <li class="menu-text">
+              <%=image_tag current_user.image %>
+              <ul class="menu vertical">
+                <li><%=link_to "Edit Account", edit_user_path(current_user)%></li>
+                <li><%=link_to "Sign Out", signout_path%></li>
+              </ul>
+            </li>
+          </ul>
+        <% else %>
+          <ul class='menu'>
+            <li class='menu-text'>
+              <%= link_to "Sign in with Facebook", "/auth/facebook", id: "sign_in" %>
+            </li>
+          </ul>
+        <% end %>
+      </div>
+    </nav>
+  </div>
+</div>

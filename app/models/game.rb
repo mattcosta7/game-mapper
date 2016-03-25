@@ -2,11 +2,13 @@ class Game < ActiveRecord::Base
   belongs_to :creator, class_name: :User, foreign_key: :creator_id
   has_many :game_attendees, dependent: :destroy
   has_many :attendees, through: :game_attendees, source: :user, dependent: :destroy
-  # before_save :add_location
   geocoded_by :location
   after_validation :geocode
 
-  scope :future, -> { select { |x| x if x.date > Time.now }}
+  scope :future, -> { select { |x| x if x.date > DateTime.now }}
+  scope :by_date, -> { order(:date) }
+  scope :sport_options, -> {sports.collect{|x| [x[:name],x[:id]] }}
+  scope :skill_options, -> {skills.collect{|x| [x[:name],x[:id]] }}
   @@skills_list = [
     {
       id: 1,
@@ -31,7 +33,7 @@ class Game < ActiveRecord::Base
   end
 
   def skill
-    @@skills_list[self.skill_level][:name]
+    @@skills_list[self.skill_level-1][:name]
   end
 
   @@sports = [
@@ -66,7 +68,7 @@ class Game < ActiveRecord::Base
   end
 
   def sport_name
-    @@sports[self.sport][:name]
+    @@sports[self.sport-1][:name]
   end
 
   def location

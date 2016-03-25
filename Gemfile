@@ -12,6 +12,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'geocoder'
+gem 'foundation-rails'
+
 group :development, :test do
   gem 'byebug'
 end
