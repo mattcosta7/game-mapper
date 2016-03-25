@@ -1,28 +1,43 @@
 <%= form_for @game do |f| %>
-  <div class='field'>
+<div class="medium-6 columns">
     <%= f.label :sport %>
     <%= f.select :sport, options_for_select(Game.sport_options,selected: @game.sport) %>
-  </div>
-  <div class='field'>
+</div>
+<div class="medium-6 columns">
     <%= f.label :skill_level %>
     <%= f.select :skill_level, options_for_select(Game.skill_options, selected: @game.skill_level ) %>
-  </div>
-  <div class='field'>
-    <%=f.label :date %>
-    <%=f.date_select :date %>
-    <%=f.time_select :date, :ignore_date => true %>
 </div>
-  <div class='field'>
+<div class="medium-6 columns">
+    <%=label_tag :date %>
+    <%=text_field_tag :fake_date, nil,id: 'dp1' %>
+    <%=f.hidden_field :date, id: 'real_date'%>
+</div>
+<div class="medium-6 columns">
     <%= f.label :address %>
     <%= f.text_field :address %>
-  </div>
-  <div class='field'>
+</div>
+<div class="medium-6 columns">
     <%= f.label :city %>
     <%= f.text_field :city %>
-  </div>
-  <div class='field'>
+</div>
+<div class="medium-6 columns">
     <%= f.label :state %>
     <%= f.text_field :state %>
-  </div>
+</div>
   <%= f.submit  %>
 <%end%>
+
+<script>
+$(function(){
+  $('#dp1').fdatepicker({
+    initialDate: new Date(),
+    format: 'mm-dd-yyyy  hh:ii',
+    disableDblClickSelection: true,
+    pickTime: true
+  }).on('changeDate', function (event) {
+    event.preventDefault();
+    date = new Date($('#dp1').val());
+    $('#real_date').val(date);
+  })
+})
+</script>

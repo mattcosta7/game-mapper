@@ -54,7 +54,7 @@ function initMap() {
                     content += "<div class='small-6 large-6 columns'><ul>Attendees";
                     for(var i = 0; i<data.attendees.length; i++){
                       var person = data.attendees[i]
-                      content += "<li>"+"<img src='"+person.image+"'>"+person.name+"</li>";
+                      content += "<li>"+"<a href='/users/"+person.id+"'><img src='"+person.image+"'>"+person.name+"</a></li>";
                     }
                     content += "</ul></div></div>"
                     holder.innerHTML = content;

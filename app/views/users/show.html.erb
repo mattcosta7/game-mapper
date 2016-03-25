@@ -1,8 +1,13 @@
-<%= @user.name %>
-<%= image_tag @user.profile_photo(:large) %>
-<%= @user.first_name %>
-<% if @user %>
-  Welcome, <%=@user.name%>
-<%end%>
-<%= link_to "Make a New Game", new_game_path %>
+<div class='row'>
+  <div class='columns small-6 large-6'>
+    <%= image_tag @user.profile_photo(:large) %>
+  </div>
+  <div class='columns small-6 large-6'>
+    <%= @user.name %>
+  </div>
+</div>
+<div class='row columns'>
+  <%= @user.bio %>
+</div>
+
  

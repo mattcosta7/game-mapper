@@ -1,8 +1,12 @@
 <div class='row'>
   <div class='small-6 large-6 columns'>
     <%= form_for @user do |f|%>
+      <%= f.label :name %>
       <%= f.text_field :name %>
+      <%= f.label :phone %>
       <%= f.number_field :phone %>
+      <%= f.label :bio %>
+      <%= f.text_area :bio %>
       <%= f.submit%>
     <%end%>
   </div>
