@@ -60,10 +60,6 @@ class Game < ActiveRecord::Base
     {
       id: 5,
       name: 'Soccer'
-    },
-    {
-      id: 6,
-      name: 'Hockey'
     }
   ]
 
