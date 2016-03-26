@@ -1,27 +1,40 @@
-<% if current_user %>
-  Welcome, <%=current_user.name%>
-<%end%>
-<%= link_to "Make a New Game", new_game_path %>
-<ul>
-  <% @games.each do |game| %>
-    <li>
-      <%= game.display_time%>
-      <%= game.sport_name %>
-      <br>
-      <%= game.skill %>
-      <br>
-      Created By: <%= game.creator.name %>
-      <ul>
-        Attendees:
-        <% game.attendees.each do |attendee| %>
-            <li><%=attendee.name%></li>
-        <%end%>
-      </ul>
-    </li>
-    <li>
-      <%=link_to "<button>Show</button>".html_safe,game_path(game)%>
-      <%=link_to "<button>Edit</button>".html_safe,edit_game_path(game)%>
-      <%=link_to "<button>Delete</button>".html_safe,game_path(game), method: :delete%>
-    </li>
-  <%end%>
-</ul>
+<div class='row'>
+  <div class='small-4 large-4 columns'>
+    <% if current_user %>
+      <p>Welcome, <%=current_user.name%><p>
+    <%end%>
+    <%= link_to "Make a New Game", new_game_path %>
+    <ul>
+      <form action='/games' method='get'>
+        <input id='queryInput' type='date' name='q' value='<%=params[:q]%>'>
+        <input type='submit'>
+      </form>
+      <% @games.each do |game| %>
+        <li>
+          <%= game.display_time%>
+          <%= game.sport_name %>
+          <br>
+          <%= game.skill %>
+          <br>
+          Created By: <%= game.creator.name %>
+          <ul>
+            Attendees:
+            <% game.attendees.each do |attendee| %>
+                <li><%=attendee.name%></li>
+            <%end%>
+          </ul>
+        </li>
+        <li>
+          <%=link_to "<button>Show</button>".html_safe,game_path(game)%>
+          <%=link_to "<button>Edit</button>".html_safe,edit_game_path(game)%>
+          <%=link_to "<button>Delete</button>".html_safe,game_path(game), method: :delete%>
+        </li>
+      <%end%>
+    </ul>
+  </div>
+  <div class='small-8 large-8 columns'>
+    <div id='map'></div>
+  </div>
+</div>
+  <script src='https://maps.googleapis.com/maps/api/js?key=<%=Rails.application.secrets.gmaps%>&callback=initMap'>
+  </script>

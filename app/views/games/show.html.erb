@@ -1,31 +1,31 @@
-<% if current_user %>
-  Welcome, <%=current_user.name%>
-<%end%>
-<ul>
-    <li>
-      <%= @game.date %>
-      <%= @game.sport_name %>
-      <br>
-      <%= @game.skill %>
-      <br>
-      Created By: <%= @game.creator.name %>
-      <ul>
-        Attendees:
-        <% @game.attendees.each do |attendee| %>
+<div class='row'>
+  <div class='small-6 large-6 columns'>
+    <ol>
+      <li>
+        <%= @game.date %>
+        <%= @game.sport_name %>
+        <br>
+        <%= @game.skill %>
+        <br>
+        Created By: <%= @game.creator.name %>
+        <ul>
+          Attendees:
+          <% @game.attendees.each do |attendee| %>
             <li><%=attendee.name%></li>
-      </ul>
-    </li>
-  <%end%>
-</ul>
-
-<style>
-  #map {
-    height: 400px;
-    width: 400px;
-  }
-</style>
-
-<div id='map'></div>
+          <%end%>
+        </ul>
+      </li>
+      <% if @game.attendees.include?(current_user) %>
+        <%=link_to "Leave Game", destroy_game_attendee_path(@game), method: :delete %>
+      <% else %>
+        <%=link_to "Join Game", create_game_attendee_path(@game), method: :post %>
+      <%end%>
+    </ol>
+  </div>
+  <div class='small-6 large-6 columns'>
+    <div id='map'></div>
+  </div>
+</div>
 
 <script type="text/javascript">
   var map,lat,long;

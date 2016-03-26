@@ -5,6 +5,10 @@ class Game < ActiveRecord::Base
   geocoded_by :location
   after_validation :geocode
 
+  validates :date, presence: true
+  validates :sport, presence: true
+  validates :skill_level, presence: true
+  
   scope :future, -> { select { |x| x if x.date > DateTime.now }}
   scope :by_date, -> { order(:date) }
   scope :sport_options, -> {sports.collect{|x| [x[:name],x[:id]] }}

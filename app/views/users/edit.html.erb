@@ -1,13 +1,24 @@
 <div class='row'>
-  <div class='small-6 large-6 columns'>
-    <%= form_for @user do |f|%>
-      <%= f.label :name %>
-      <%= f.text_field :name %>
-      <%= f.label :phone %>
-      <%= f.number_field :phone %>
-      <%= f.label :bio %>
-      <%= f.text_area :bio %>
-      <%= f.submit%>
+  <div class='small-12 large-6 large-offset-3 columns'>
+    <%= form_for @user, class:'input-group' do |f|%>
+      <%= f.label :name, class: "input-group-label" %>
+      <%= f.text_field :name, class:"input-group-field" %>
+      <div class='row'>
+        <div class='small-6 large-6 columns'>
+          <%= f.label :phone, class: "input-group-label"  %>
+          <%= f.number_field :phone, class:"input-group-field" %>
+        </div>
+        <div class='small-6 large-6 columns'>
+          <%= f.label :text_reminder, class: "input-group-label" %>
+          <%= f.check_box :text_reminder, class:"input-group-field"%>
+        </div>
+      </div>
+      <%= f.label :bio, class: "input-group-label"  %>
+      <%= f.text_area :bio, class:"input-group-field" %>
+      <div class='row columns'>
+      <%= f.submit class:"button"%>
     <%end%>
+      <%=link_to 'Delete User', user_path(current_user), method: :delete, class: "alert button" %>
+    </div>
   </div>
 </div>

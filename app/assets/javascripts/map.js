@@ -9,7 +9,7 @@ function initMap() {
       zoom: 11
     });
     $.ajax({
-      url: '/games.json',
+      url: '/games.json'+window.location.search,
       method: 'get',
       success: function(data){
         playData = data;
@@ -24,7 +24,7 @@ function initMap() {
           var link = "<a href='/games/"+game.id+"'>"+game.sport_name+"</a>";
           var skill = game.skill;
           var contentString = displayDate + "<br>" + link + "<br>"+ skill;
-          var infowindow = new google.maps.InfoWindow({
+          infowindow = new google.maps.InfoWindow({
           });
           var myLatLng = {lat: game.latitude, lng: game.longitude};
           var marker = new google.maps.Marker({
@@ -43,12 +43,16 @@ function initMap() {
                 url: '/games/'+marker.id+'.json',
                 method: 'get',
                 success:function(data){
-                  stuff = data
+                  var inGame=false;
+                  for(var i = 0; i< data.attendees.length; i++){
+                    if(data.attendees[i].id == data.current_user.id){
+                      inGame = true
+                      break;
+                    }
+                  }
                   content = 
-                  "<div class='row'><div class='small-6 large-6 columns'><p>"+data.sport_name+"</p><p>"+data.skill+"</p><p>"+data.address + "</p><p>"+data.city+"</p><p>"+data.state+ "</p></div>";
-
+                  "<div class='row'><div class='small-6 large-6 columns'><a href='/" + (inGame ? "game_attendees/" : "join/")+data.id+"'data-method='delete''>"+ (inGame ? "Leave " : "Join ") + "Game</a><p>"+data.sport_name+"</p><p>"+data.skill+"</p><p>"+data.address + "</p><p>"+data.city+"</p><p>"+data.state+ "</p></div>";
                   var holder = document.getElementById('game-detail');
-
                   holder.innerHTML = content;
                   if(data.attendees.length > 0){
                     content += "<div class='small-6 large-6 columns'><ul>Attendees";

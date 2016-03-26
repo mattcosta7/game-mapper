@@ -1,13 +1,20 @@
 <div class='row'>
   <div class='columns small-6 large-6'>
     <%= image_tag @user.profile_photo(:large) %>
+    <% if @user.games_attending.present?%>
+      <ul>
+        <%@user.games_attending.by_date.each do |game| %>
+          <li><%=link_to((game.display_time + " " + game.sport_name), game)%></li>
+        <%end%>
+      </ul>
+    <%else%>
+      <p>Not Attending Any Upcoming Games</p>
+    <%end%>
   </div>
   <div class='columns small-6 large-6'>
-    <%= @user.name %>
+    <p><%= @user.name %></p>
+    <p><%= @user.bio %></p>
   </div>
-</div>
-<div class='row columns'>
-  <%= @user.bio %>
 </div>
 
  

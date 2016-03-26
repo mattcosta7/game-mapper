@@ -19,3 +19,16 @@
 .top-bar img{
   border-radius: 50%;
 }
+
+.top-bar a{
+  color: #000;
+}
+
+#map {
+  height: 50vh;
+  width: 100%;
+}
+
+#queryInput:before{ content:attr(placeholder) !important; width:100%; color:#AAA; } 
+#queryInput:focus:before,
+#queryInput.not_empty:before{ content:none }

@@ -1,7 +1,13 @@
 class GamesController < ApplicationController
 
   def index
-    @games = Game.all.by_date.future
+    if params[:q].present?
+      time = params[:q].split('-')
+      date = DateTime.new(time[0].to_i,time[1].to_i,time[2].to_i)
+      @games = Game.where("DATE(date) = ? ",date).by_date
+    else
+      @games = Game.all.by_date.future
+    end
     @game_json = []
     @games.each do |game|
       sport_name = {"sport_name" => game.sport_name}
@@ -24,7 +30,10 @@ class GamesController < ApplicationController
     @game = Game.new game_params
     if @game.save
       @game.attendees << current_user
-      redirect_to games_path
+      respond_to do |format|
+        format.html {redirect_to games_path}
+        format.js { render locals: {game: @game}}
+      end
     else
       redirect_to :back
     end
@@ -35,7 +44,8 @@ class GamesController < ApplicationController
     attendees = {"attendees" => @game.attendees}
     sport_name = {"sport_name" => @game.sport_name}
     skill = {"skill" => @game.skill}
-    @game_json = JSON::parse(@game.to_json).merge(attendees).merge(sport_name).merge(skill)
+    cur_user = {current_user: current_user}
+    @game_json = JSON::parse(@game.to_json).merge(attendees).merge(sport_name).merge(skill).merge(cur_user)
     respond_to do |format|
       format.html
       format.json {render json: @game_json}
