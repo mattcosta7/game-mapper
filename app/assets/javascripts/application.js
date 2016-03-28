@@ -15,4 +15,18 @@
 //= require foundation
 //= require_tree .
 
-$(function(){ $(document).foundation(); });
+$(function(){
+
+  $(document).foundation();
+
+  $('#dp1').fdatepicker({
+    initialDate: new Date(),
+    format: 'mm-dd-yyyy  hh:ii',
+    disableDblClickSelection: true,
+    pickTime: true
+  }).on('changeDate', function (event) {
+    event.preventDefault();
+    var date = new Date($('#dp1').val());
+    $('#real_date').val(date);
+  });
+});

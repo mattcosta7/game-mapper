@@ -25,6 +25,9 @@
 }
 
 #map {
+  background-image: url('/assets/loader.gif');
+  background-repeat: no-repeat;
+  background-position: center; 
   height: 50vh;
   width: 100%;
 }

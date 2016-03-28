@@ -1,8 +1,8 @@
 class GamesController < ApplicationController
 
   def index
-    if params[:q].present?
-      time = params[:q].split('-')
+    if params[:date].present?
+      time = params[:date].split('-')
       date = DateTime.new(time[0].to_i,time[1].to_i,time[2].to_i)
       @games = Game.where("DATE(date) = ? ",date).by_date
     else
