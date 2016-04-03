@@ -13,6 +13,10 @@ gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'geocoder'
 gem 'foundation-rails'
+gem 'twilio-ruby'
+gem 'delayed_job_active_record'
+gem "workless"
+gem 'daemons'
 
 group :development, :test do
   gem 'byebug'

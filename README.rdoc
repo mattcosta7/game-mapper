@@ -87,3 +87,13 @@
         end
 1. bring in gmaps javascript
     1. set initial maps
+    1. new game form ajax 
+    1. js to empty form on success
+
+1. add delayed jobs
+  1. workless, delayed jobs gems
+  1. rake delayedjobs:install
+  1. functions to game/attendee for delayed jobs 
+  1. add twilio
+  1. add phone_number_check
+  1. text if user has reminders set

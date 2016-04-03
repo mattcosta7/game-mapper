@@ -8,6 +8,8 @@ function initMap() {
       scrollwheel: false,
       zoom: 11
     });
+    infowindow = new google.maps.InfoWindow({
+    });
     $.ajax({
       url: '/games.json'+window.location.search,
       method: 'get',
@@ -23,8 +25,6 @@ function initMap() {
           var link = "<a href='/games/"+game.id+"'>"+game.sport_name+"</a>";
           var skill = game.skill;
           var contentString = displayDate + "<br>" + link + "<br>"+ skill;
-          var infowindow = new google.maps.InfoWindow({
-          });
           var myLatLng = {lat: game.latitude, lng: game.longitude};
           var marker = new google.maps.Marker({
               id: game.id,
@@ -50,11 +50,11 @@ function initMap() {
                     }
                   }
                   var content =
-                  "<div class='row'><div class='small-6 large-6 columns'><a href='/" + (inGame ? "game_attendees/" : "join/")+data.id+"'data-method='delete''>"+ (inGame ? "Leave " : "Join ") + "Game</a><p>"+data.sport_name+"</p><p>"+data.skill+"</p><p>"+data.address + "</p><p>"+data.city+"</p><p>"+data.state+ "</p></div>";
+                  "<div class='row'><div class='small-6 large-6 columns details'><p>"+data.sport_name+"</p><p>"+data.skill+"</p><p>"+data.address + "</p><p>"+data.city+"</p><p>"+data.state+ "</p><a href='/" + (inGame ? ("game_attendees/"+ data.id+ "' data-method='delete'>") : "game_attendees/"+ data.id+ "' data-method='post'>")+ (inGame ? "Leave " : "Join ") + "Game</a></div>";
                   var holder = document.getElementById('game-detail');
                   holder.innerHTML = content;
                   if(data.attendees.length > 0){
-                    content += "<div class='small-6 large-6 columns'><ul>Attendees";
+                    content += "<div class='small-6 large-6 columns attendees'><ul>Who's Gonna Be There?";
                     for(var j = 0; j<data.attendees.length; j++){
                       var person = data.attendees[j];
                       content += "<li>"+"<a href='/users/"+person.id+"'><img src='"+person.image+"'>"+person.name+"</a></li>";
@@ -63,7 +63,8 @@ function initMap() {
                     holder.innerHTML = content;
                   }
                   else{
-                    holder.innerHTML += "<p>No One Attending Yet, be the first</p>";
+                    content += "<div class='small-6 large-6 columns attendees'><ul>Who's Gonna Be There?<li>No One Attending Yet, be the first</li></ul></div>"
+                    holder.innerHTML = content;
                   }
                 }
               });

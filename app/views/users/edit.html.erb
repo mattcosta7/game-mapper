@@ -6,7 +6,7 @@
       <div class='row'>
         <div class='small-6 large-6 columns'>
           <%= f.label :phone, class: "input-group-label"  %>
-          <%= f.number_field :phone, class:"input-group-field" %>
+          <%= f.text_field :phone, class:"input-group-field" %>
         </div>
         <div class='small-6 large-6 columns'>
           <%= f.label :text_reminder, class: "input-group-label" %>
@@ -14,7 +14,7 @@
         </div>
       </div>
       <%= f.label :bio, class: "input-group-label"  %>
-      <%= f.text_area :bio, class:"input-group-field" %>
+      <%= f.text_area :bio, class:"input-group-field", rows: 12 %>
       <div class='row columns'>
       <%= f.submit class:"button"%>
     <%end%>

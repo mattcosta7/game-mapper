@@ -3,12 +3,10 @@ class User < ActiveRecord::Base
   has_many :game_attendees
   has_many :games_attending, through: :game_attendees, source: :game
 
+  before_validation :phone_check
+
   def self.from_omniauth(auth)
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-      puts auth.inspect
-      puts auth.info.inspect
-      puts auth.extra.inspect
-      puts auth.extra.raw_info.inspect
       user.provider = auth.provider 
       user.uid      = auth.uid
       user.name     = auth.info.name
@@ -33,4 +31,21 @@ class User < ActiveRecord::Base
   def profile_photo(size='normal')
     "http://graph.facebook.com/#{self.uid}/picture?type=#{size}"
   end
+
+
+  def phone_check
+    @client = Twilio::REST::LookupsClient.new Rails.application.secrets.twilio_account_sid, Rails.application.secrets.twilio_auth_token
+    begin
+      response = @client.phone_numbers.get(self.phone) 
+      self.phone = response.phone_number
+      return true
+    rescue => e 
+      if e.code == 20404       
+        return false
+      else
+        raise e
+      end
+    end
+  end
+    
 end
