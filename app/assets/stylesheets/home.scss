@@ -10,70 +10,59 @@
   background-image: url('/assets/loader.gif');
   background-repeat: no-repeat;
   background-position: center;
-  height: 50vh;
+  height: calc(100vh - 88px);
   width: 100%;
-}
-
-#game-detail{
-  ul{
-    list-style-type: none;
-  }
-  p{
-    text-align: center;
-    margin-bottom: 0;
-  }
-  .details{
-    text-align: center;
-  }
+  z-index: 9;
 }
 
 #queryInput:before{ content:attr(placeholder) !important; width:100%; color:#AAA; }
 #queryInput:focus:before,
 #queryInput.not_empty:before{ content:none }
 
+.form-div, .details-div{
+  position: relative;
+  top: calc(-100vh + 88px);
+  background-color: rgba(0,0,0,.4);
+  z-index: 10;
+  label{
+    background-color: rgba(0,0,0,.1);
+    font-size: 1em;
+    color: white;
+    font-weight: bold;
+  }
+  select{
+    margin-bottom: 0;
+  }
+  input{
+    margin-bottom: 0;
+  }
+  p{
+    background-color: white;
+    font-size: 1em;
+    color: black;
+    font-weight: bold;
+  }
+}
 
-.onoffswitch {
-    position: relative; width: 90px;
-    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+.shove-right{
+  right: -100vw;
 }
-.onoffswitch-checkbox {
-    display: none;
-}
-.onoffswitch-label {
-    display: block; overflow: hidden; cursor: pointer;
-    border: 2px solid #999999; border-radius: 20px;
-}
-.onoffswitch-inner {
-    display: block; width: 200%; margin-left: -100%;
-    transition: margin 0.3s ease-in 0s;
-}
-.onoffswitch-inner:before, .onoffswitch-inner:after {
-    display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
-    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
-    box-sizing: border-box;
-}
-.onoffswitch-inner:before {
-    content: "ON";
-    padding-left: 10px;
-    background-color: #34A7C1; color: #FFFFFF;
-}
-.onoffswitch-inner:after {
-    content: "OFF";
-    padding-right: 10px;
-    background-color: #EEEEEE; color: #999999;
-    text-align: right;
-}
-.onoffswitch-switch {
-    display: block; width: 18px; margin: 6px;
-    background: #FFFFFF;
-    position: absolute; top: 0; bottom: 0;
-    right: 56px;
-    border: 2px solid #999999; border-radius: 20px;
-    transition: all 0.3s ease-in 0s; 
-}
-.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+
+.attendees{
+  padding: 0;
+  ul{
+    background-color: white;
+    color: black;
     margin-left: 0;
+  }
 }
-.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
-    right: 0px; 
+
+#mapper-menu{
+  z-index: 9999;
+  position: relative;
+}
+
+.games_attendees_display{
+  text-align: center;
+  display: inline-block;
 }

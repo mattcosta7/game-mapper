@@ -2,7 +2,8 @@ class Game < ActiveRecord::Base
   belongs_to :creator, class_name: :User, foreign_key: :creator_id
   has_many :game_attendees, dependent: :destroy
   has_many :attendees, through: :game_attendees, source: :user, dependent: :destroy
-  geocoded_by :location
+  has_many :posts, dependent: :destroy
+  geocoded_by :address
   after_validation :geocode
 
   validates :date, presence: true
@@ -71,11 +72,8 @@ class Game < ActiveRecord::Base
     @@sports[self.sport-1][:name]
   end
 
-  def location
-    self.address + ', ' + self.city + ', ' + self.state
-  end
-
   def display_time
     self.date.strftime('%a %b %e, %l:%M %p')
   end
+  
 end

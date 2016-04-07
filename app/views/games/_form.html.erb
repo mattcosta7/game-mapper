@@ -12,17 +12,9 @@
       <%=text_field_tag :fake_date, nil,id: 'dp1' %>
       <%=f.hidden_field :date, id: 'real_date'%>
   </div>
-  <div class="row columns">
+  <div class="row columns" id='locationField'>
       <%= f.label :address %>
-      <%= f.text_field :address %>
-  </div>
-  <div class="row columns">
-      <%= f.label :city %>
-      <%= f.text_field :city %>
-  </div>
-  <div class="row columns">
-      <%= f.label :state %>
-      <%= f.text_field :state %>
+      <%= f.text_field :address, id:"autocomplete", onFocus: "geolocate()" %>
   </div>
   <% if @game.id %>
    <%= f.submit class:"button success" %>
@@ -30,3 +22,6 @@
     <%= f.submit class:"button" %>
   <%end%>
 <%end%>
+
+
+

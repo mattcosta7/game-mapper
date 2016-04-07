@@ -41,13 +41,15 @@ class GamesController < ApplicationController
 
   def show
     @game = Game.find params[:id]
+    @posts = @game.posts
+    display_time = {"display_time" => @game.display_time}
     attendees = {"attendees" => @game.attendees}
     sport_name = {"sport_name" => @game.sport_name}
     skill = {"skill" => @game.skill}
     cur_user = {current_user: current_user}
-    @game_json = JSON::parse(@game.to_json).merge(attendees).merge(sport_name).merge(skill).merge(cur_user)
+    @game_json = JSON::parse(@game.to_json).merge(attendees).merge(sport_name).merge(skill).merge(cur_user).merge(display_time)
     respond_to do |format|
-      format.html
+      format.html {render layout: false}
       format.json {render json: @game_json}
     end
   end
@@ -76,7 +78,7 @@ class GamesController < ApplicationController
 
   private
   def game_params
-    params.require(:game).permit(:address, :city, :state, :sport, :skill_level, :date).merge(creator_id: current_user.id)
+    params.require(:game).permit(:address, :sport, :skill_level, :date).merge(creator_id: current_user.id)
   end
 
 end

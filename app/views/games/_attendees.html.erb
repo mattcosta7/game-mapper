@@ -1,0 +1,26 @@
+<%if @game.attendees.length == 0 %>
+  <div>
+    No One Attending Yet, Be the first!
+  </div>
+<%else%>
+  <div>
+    Who's Going?
+  </div>
+  <% if !@game.attendees.include?(current_user) %>
+     <button class='join_link button success' href=<%=create_game_attendee_path(@game)%> data-method='post'>Join Game</button>
+  <% end %>
+  <% @game.attendees.each do |attendee| %>
+    <div class='games_attendees_display'>
+      <%=link_to (image_tag attendee.profile_photo(:large)), attendee %>
+      <div class='name-text'>
+        <%=attendee.name%>
+      </div>
+    </div>
+    <%if attendee==current_user%>
+      <div>
+       <button class='join_link button alert' href=<%=create_game_attendee_path(@game)%> data-method='delete'>Leave Game</button>
+      </div>
+    <%end%>
+
+  <%end%>
+<%end%>

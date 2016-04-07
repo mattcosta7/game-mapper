@@ -21,34 +21,27 @@ var marker = new google.maps.Marker({
   animation: google.maps.Animation.DROP,
   content: contentString
 });
-google.maps.event.addListener(marker, 'click', (function(marker) {  
-  return function() {   
-     infowindow.setContent(marker.content);  
-     infowindow.open(map, marker);
-     $.ajax({
+$('.form-div').toggle("slide", { direction: "right" }, 1000);
+map.panTo(marker.getPosition());
+google.maps.event.addListener(marker, 'click', (function(marker) {
+  return function() {
+    map.panTo(marker.getPosition());
+    $.ajax({
       url: '/games/'+marker.id+'.json',
       method: 'get',
       success:function(data){
-        stuff = data
-        content = 
-        "<div class='row'><div class='small-6 large-6 columns'><p>"+data.sport_name+"</p><p>"+data.skill+"</p><p>"+data.address + "</p><p>"+data.city+"</p><p>"+data.state+ "</p></div>";
-
-        var holder = document.getElementById('game-detail');
-
-        holder.innerHTML = content;
-        if(data.attendees.length > 0){
-          content += "<div class='small-6 large-6 columns'><ul>Attendees";
-          for(var i = 0; i<data.attendees.length; i++){
-            var person = data.attendees[i]
-            content += "<li>"+"<a href='/users/"+person.id+"'><img src='"+person.image+"'>"+person.name+"</a></li>";
+        var inGame=false;
+        for(var i = 0; i< data.attendees.length; i++){
+          if(data.attendees[i].id === data.current_user.id){
+            inGame = true;
+            break;
           }
-          content += "</ul></div></div>"
-          holder.innerHTML = content;
         }
-        else{
-          holder.innerHTML += "<p>No One Attending Yet, be the first</p>"
-        }
+        var content =
+        "<p>"+data.display_time+"</p><p>"+data.sport_name+"</p><p>"+data.skill+"</p><p>"+data.address.replaceAll(',','<br>') + "</p><p><button class='join_link button " + (inGame ? "alert'" : "success'") + " href='/" + (inGame ? ("game_attendees/"+ data.id+ "' data-method='delete'>") : "game_attendees/"+ data.id+ "' data-method='post'>")+ (inGame ? "Leave " : "Join ") + "Game</button></p>" + "<button api-endpoint='"+marker.id+"' class='view_game button primary'>View</button>";
+        infowindow.setContent(content);
+        infowindow.open(map, marker);
       }
-    })  
-  }  
-})(marker)); 
+    });
+  };
+})(marker));

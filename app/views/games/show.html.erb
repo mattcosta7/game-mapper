@@ -1,54 +1,27 @@
-<div class='row'>
-  <div class='small-6 large-6 columns'>
-    <ol>
-      <li>
-        <%= @game.date %>
-        <%= @game.sport_name %>
-        <br>
-        <%= @game.skill %>
-        <br>
-        Created By: <%= @game.creator.name %>
-        <ul>
-          Attendees:
-          <% @game.attendees.each do |attendee| %>
-            <li><%=attendee.name%></li>
-          <%end%>
-        </ul>
-      </li>
-      <% if @game.attendees.include?(current_user) %>
-        <%=link_to "Leave Game", destroy_game_attendee_path(@game), method: :delete %>
-      <% else %>
-        <%=link_to "Join Game", create_game_attendee_path(@game), method: :post %>
-      <%end%>
-    </ol>
+<div class='small-8 large-8 columns'>
+  <div class='games-details'>
+    <%= image_tag "/assets/#{@game.sport_name}_banner.png".downcase %>
+    <p>
+      When's the game, dude? <%= @game.display_time %>
+    </p>
+    <p>
+      What are ya playin? <%= @game.sport_name %>
+    </p>
+    <p>
+      How good are ya? <%= @game.skill %>
+    </p>
+    <p>
+      Who's runing this show? <%= @game.creator.name %>
+    </p>
   </div>
-  <div class='small-6 large-6 columns'>
-    <div id='map'></div>
-  </div>
+  <button class='button primary' id='back'>
+    Back To Map
+  </button>
+
 </div>
 
-<script type="text/javascript">
-  var map,lat,long;
-  function initMap() {
-    var myLatLng = {lat: <%=@game.latitude%>, lng: <%=@game.longitude%>};
-      map = new google.maps.Map(document.getElementById('map'), {
-        center: myLatLng,
-        scrollwheel: false,
-        zoom: 15
-      });
-        var contentString = "<%=@game.display_time%><br><%=@game.sport_name%><br><%=@game.skill%>";
-        var infowindow<%=@game.id%> = new google.maps.InfoWindow({
-          content: contentString
-        });
-        var marker = new google.maps.Marker({
-            position: myLatLng,
-            map: map,
-            title: '<%=@game.sport_name%>',
-            animation: google.maps.Animation.DROP
-          });
-        google.maps.event.addListener(marker, 'click',function() {
-            infowindow<%=@game.id%>.open(map, this);
-         });
-    }
-</script>
-<script src='https://maps.googleapis.com/maps/api/js?key=<%=Rails.application.secrets.gmaps%>&callback=initMap'></script>
+<div class='small-4 large-4 columns game show' id='game_show'>
+  <%= render partial: 'attendees'%>
+</div>
+
+      

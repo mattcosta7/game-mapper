@@ -1,12 +1,18 @@
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
+
 var map,lat,long;
 function initMap() {
+  initAutocomplete();
   navigator.geolocation.getCurrentPosition(function(position) {
     lat = position.coords.latitude;
     long = position.coords.longitude;
     map = new google.maps.Map(document.getElementById('map'), {
       center: {lat: lat, lng: long},
       scrollwheel: false,
-      zoom: 11
+      zoom: 13
     });
     infowindow = new google.maps.InfoWindow({
     });
@@ -22,23 +28,18 @@ function initMap() {
               day: "numeric", hour: "2-digit", minute: "2-digit"
           };
           var displayDate = date.toLocaleTimeString("en-us", options);
-          var link = "<a href='/games/"+game.id+"'>"+game.sport_name+"</a>";
           var skill = game.skill;
-          var contentString = displayDate + "<br>" + link + "<br>"+ skill;
           var myLatLng = {lat: game.latitude, lng: game.longitude};
           var marker = new google.maps.Marker({
               id: game.id,
               position: myLatLng,
               map: map,
-              title: game.sport_name,
               animation: google.maps.Animation.DROP,
-              content: contentString
             });
           google.maps.event.addListener(marker, 'click', (function(marker) {
             return function() {
-               infowindow.setContent(marker.content);
-               infowindow.open(map, marker);
-               $.ajax({
+              map.panTo(marker.getPosition());
+              $.ajax({
                 url: '/games/'+marker.id+'.json',
                 method: 'get',
                 success:function(data){
@@ -50,22 +51,9 @@ function initMap() {
                     }
                   }
                   var content =
-                  "<div class='row'><div class='small-6 large-6 columns details'><p>"+data.sport_name+"</p><p>"+data.skill+"</p><p>"+data.address + "</p><p>"+data.city+"</p><p>"+data.state+ "</p><a href='/" + (inGame ? ("game_attendees/"+ data.id+ "' data-method='delete'>") : "game_attendees/"+ data.id+ "' data-method='post'>")+ (inGame ? "Leave " : "Join ") + "Game</a></div>";
-                  var holder = document.getElementById('game-detail');
-                  holder.innerHTML = content;
-                  if(data.attendees.length > 0){
-                    content += "<div class='small-6 large-6 columns attendees'><ul>Who's Gonna Be There?";
-                    for(var j = 0; j<data.attendees.length; j++){
-                      var person = data.attendees[j];
-                      content += "<li>"+"<a href='/users/"+person.id+"'><img src='"+person.image+"'>"+person.name+"</a></li>";
-                    }
-                    content += "</ul></div></div>";
-                    holder.innerHTML = content;
-                  }
-                  else{
-                    content += "<div class='small-6 large-6 columns attendees'><ul>Who's Gonna Be There?<li>No One Attending Yet, be the first</li></ul></div>"
-                    holder.innerHTML = content;
-                  }
+                  "<p>"+data.display_time+"</p><p>"+data.sport_name+"</p><p>"+data.skill+"</p><p>"+data.address.replaceAll(',','<br>') + "</p><p><button class='join_link button " + (inGame ? "alert'" : "success'") + " href='/" + (inGame ? ("game_attendees/"+ data.id+ "' data-method='delete'>") : "game_attendees/"+ data.id+ "' data-method='post'>")+ (inGame ? "Leave " : "Join ") + "Game</button></p>" + "<button api-endpoint='"+marker.id+"' class='view_game button primary'>View</button>";
+                  infowindow.setContent(content);
+                  infowindow.open(map, marker);
                 }
               });
             };

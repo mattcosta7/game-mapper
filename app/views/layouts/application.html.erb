@@ -17,5 +17,9 @@
     <%=render partial: 'partials/navbar'%>
     <%= yield %>
 
+
+<script src='https://maps.googleapis.com/maps/api/js?key=<%=Rails.application.secrets.gmaps%>&libraries=places&callback=initMap'>
+</script>
+
   </body>
 </html>
