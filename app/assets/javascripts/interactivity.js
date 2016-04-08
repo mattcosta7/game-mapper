@@ -1,6 +1,5 @@
 $(document).ready(function(){
 
-  $('.form-div').hide();
   $('#game_detail').hide();
   $('#queryInput').on('change',function(){
     this.form.submit();
@@ -10,9 +9,6 @@ $(document).ready(function(){
     $('#new_game')[0].reset();
   });
 
-  $('button').on('click',function(){
-    $('.form-div').toggle("slide", { direction: "right" }, 1000);
-  })
 
   $(document).on('click','.view_game', function(){
     var that = this;
@@ -20,16 +16,39 @@ $(document).ready(function(){
       url: '/games/'+$(that).attr('api-endpoint')+'.html',
       method: 'get',
       success:function(data){
-        $('#game_detail').html(data).toggle("slide", {direction: 'down'},1000);
-        $('#map').toggle("slide", {direction: 'up'},1000);
-      }
-    })
+        $('#mainsection').toggle("slide", {direction: 'up'},1000);
+        setTimeout(function(){
+          $('#game_detail').html(data).fadeIn(500);
+          if(typeof(chatChannel) != "undefined"){
+            chatChannel.leave().then(function(){
+              startChannel($(that).parent('div').find('.iw_sport_name').text() + "_"+ $(that).attr('api-endpoint'));
+            });
+          }
+          else{
+            startChannel($(that).parent('div').find('.iw_sport_name').text() + "_"+ $(that).attr('api-endpoint'));
+          }
+          $('.games_attendees_display').ready(function(){
+            $('.name-text').hide();
+            $('.games_attendees_display').on('mouseenter',function(){
+              $(this).find('.name-text').stop(true,true).toggle('slide',{direction: 'down'}, 1000);
+            }).on('mouseleave',function(){
+              $(this).find('.name-text').stop(true,true).toggle('slide',{direction: 'down'}, 1000);
+            });
+          });
+        },1000);
 
-  })
+      }
+    });
+
+  });
 
   $(document).on('click','#back',function(){
-    $('#game_detail').html('').toggle("slide", {direction: 'down'},1000);
-    $('#map').toggle("slide", {direction: 'up'},1000);
-    
-  })
+    $('.games_attendees_display').off('mouseenter','*');
+    $('.games_attendees_display').off('mouseleave','*');
+    $('#game_detail').off('click', '*');
+    $('#game_detail').html('').fadeOut(500);
+    setTimeout(function(){
+      $('#mainsection').toggle("slide", {direction: 'up'},1000);
+    },500);
+  });
 });

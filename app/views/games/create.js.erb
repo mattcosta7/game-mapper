@@ -9,19 +9,16 @@ var options = {
     day: "numeric", hour: "2-digit", minute: "2-digit"
 };
 var displayDate = date.toLocaleTimeString("en-us", options);
-var sportName = "<%=game.sport_name%>"
+var sportName = "<%=@game.sport_name%>"
 var link = "<a href='/games/"+game.id+"'>"+sportName+"</a>";
-var skill = "<%=game.skill%>";
+var skill = "<%=@game.skill%>";
 var contentString = displayDate + "<br>" + link + "<br>"+ skill;
 var marker = new google.maps.Marker({
   id: game.id,
   position: myLatLng,
   map: map,
-  title: sportName,
-  animation: google.maps.Animation.DROP,
-  content: contentString
+  animation: google.maps.Animation.DROP
 });
-$('.form-div').toggle("slide", { direction: "right" }, 1000);
 map.panTo(marker.getPosition());
 google.maps.event.addListener(marker, 'click', (function(marker) {
   return function() {
@@ -45,3 +42,4 @@ google.maps.event.addListener(marker, 'click', (function(marker) {
     });
   };
 })(marker));
+makeNewChannel(sportName+"_"+game.id);

@@ -51,7 +51,7 @@ function initMap() {
                     }
                   }
                   var content =
-                  "<p>"+data.display_time+"</p><p>"+data.sport_name+"</p><p>"+data.skill+"</p><p>"+data.address.replaceAll(',','<br>') + "</p><p><button class='join_link button " + (inGame ? "alert'" : "success'") + " href='/" + (inGame ? ("game_attendees/"+ data.id+ "' data-method='delete'>") : "game_attendees/"+ data.id+ "' data-method='post'>")+ (inGame ? "Leave " : "Join ") + "Game</button></p>" + "<button api-endpoint='"+marker.id+"' class='view_game button primary'>View</button>";
+                  "<p>"+data.display_time+"</p><p class='iw_sport_name'>"+data.sport_name+"</p><p>"+data.skill+"</p><p>"+data.address.replaceAll(',','<br>') + "</p><p><button class='join_link button " + (inGame ? "alert'" : "success'") + " href='/" + (inGame ? ("game_attendees/"+ data.id+ "' data-method='delete'>") : "game_attendees/"+ data.id+ "' data-method='post'>")+ (inGame ? "Leave " : "Join ") + "Game</button></p>" + "<button api-endpoint='"+marker.id+"' class='view_game button primary'>View</button>";
                   infowindow.setContent(content);
                   infowindow.open(map, marker);
                 }

@@ -15,6 +15,10 @@
   z-index: 9;
 }
 
+#mainsection{
+  height: calc(100vh - 88px) !important;
+}
+
 #queryInput:before{ content:attr(placeholder) !important; width:100%; color:#AAA; }
 #queryInput:focus:before,
 #queryInput.not_empty:before{ content:none }
@@ -65,4 +69,21 @@
 .games_attendees_display{
   text-align: center;
   display: inline-block;
+}
+
+.games-details{
+  position: relative;
+}
+.detes{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  transform: translateY(-50%) translateX(-50%);
+  width: 80%;
+  p{
+    width: 80%;
+    margin: 0 auto;
+  }
 }

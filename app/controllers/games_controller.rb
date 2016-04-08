@@ -41,7 +41,6 @@ class GamesController < ApplicationController
 
   def show
     @game = Game.find params[:id]
-    @posts = @game.posts
     display_time = {"display_time" => @game.display_time}
     attendees = {"attendees" => @game.attendees}
     sport_name = {"sport_name" => @game.sport_name}

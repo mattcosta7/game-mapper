@@ -2,7 +2,6 @@ class Game < ActiveRecord::Base
   belongs_to :creator, class_name: :User, foreign_key: :creator_id
   has_many :game_attendees, dependent: :destroy
   has_many :attendees, through: :game_attendees, source: :user, dependent: :destroy
-  has_many :posts, dependent: :destroy
   geocoded_by :address
   after_validation :geocode
 
@@ -44,23 +43,29 @@ class Game < ActiveRecord::Base
   @@sports = [
     {
       id: 1,
-      name: 'Basketball'
+      name: 'Basketball',
+      banner: 'basketball_banner.png'
     },
     {
       id: 2,
-      name: 'Baseball'
+      name: 'Baseball',
+      banner: 'basketball_banner.png'
+
     },
     {
       id: 3,
-      name: 'Kickball'
+      name: 'Kickball',
+      banner: 'kickball_banner.jpeg'
     },
     {
       id: 4,
-      name: 'Hockey'
+      name: 'Hockey',
+      banner: 'hockey_banner.png'
     },
     {
       id: 5,
-      name: 'Soccer'
+      name: 'Soccer',
+      banner: 'soccer_banner.jpg'
     }
   ]
 
@@ -74,6 +79,10 @@ class Game < ActiveRecord::Base
 
   def display_time
     self.date.strftime('%a %b %e, %l:%M %p')
+  end
+
+  def get_banner_image
+    @@sports[self.sport-1][:banner]
   end
   
 end

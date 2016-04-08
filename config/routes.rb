@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
+  
+  get 'tokens/create'
 
+  post 'tokens' => "tokens#create"
   #Paths used for facebook login
   get 'auth/:provider/callback', to: 'sessions#create'
   get 'auth/failure', to: redirect('/')
