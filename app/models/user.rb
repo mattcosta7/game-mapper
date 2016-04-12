@@ -14,12 +14,6 @@ class User < ActiveRecord::Base
       user.first_name = auth.info.first_name
       user.last_name  = auth.info.last_name
       user.bio = auth.info.bio
-      user.birthday = auth.info.birthday
-      user.age_range = auth.info.age_range
-      user.about  = auth.info.about
-      user.location   = auth.info.location
-      user.locale = auth.info.locale
-      user.description = auth.info.description
       user.phone = auth.info.phone
       user.image = auth.info.image
       user.token = auth.credentials.token
@@ -34,16 +28,18 @@ class User < ActiveRecord::Base
 
 
   def phone_check
-    @client = Twilio::REST::LookupsClient.new Rails.application.secrets.twilio_account_sid, Rails.application.secrets.twilio_auth_token
-    begin
-      response = @client.phone_numbers.get(self.phone) 
-      self.phone = response.phone_number
-      return true
-    rescue => e 
-      if e.code == 20404       
-        return false
-      else
-        raise e
+    if self.phone
+      @client = Twilio::REST::LookupsClient.new Rails.application.secrets.twilio_account_sid, Rails.application.secrets.twilio_auth_token
+      begin
+        response = @client.phone_numbers.get(self.phone) 
+        self.phone = response.phone_number
+        return true
+      rescue => e 
+        if e.code == 20404       
+          return false
+        else
+          raise e
+        end
       end
     end
   end

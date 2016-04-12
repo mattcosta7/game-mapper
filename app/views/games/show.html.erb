@@ -1,6 +1,6 @@
 <div class='small-8 large-8 columns'>
   <div class='games-details'>
-    <%= image_tag "/assets/#{@game.get_banner_image}" %>
+    <%= image_tag "/assets/#{@game.get_banner_image}", class: 'banner' %>
     <div class='detes'>
       <p>
         When's the game, dude? <%= @game.display_time %>
@@ -20,7 +20,7 @@
 
   <% if @game.attendees.include?(current_user) %>
     <div class='messenger' id='game<%=@game.id%>'>
-      <div id="messages"><%=@game.sport_name%> Trash Talk</div>
+      <div id="messages"><%=@game.sport_name%> Trash Talk<br></div>
       <input id="chat-input" class="form-control" type="text" placeholder="say anything" autofocus/>
     </div>
   <%else%>

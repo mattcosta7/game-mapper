@@ -5,6 +5,7 @@ function startChannel(name){
 
     function printMessage(message) {
       $('#messages').append(message + "<br>");
+      $('#messages').scrollTop($('#messages')[0].scrollHeight);
     }
     function printDate(timestamp){
         var dd = timestamp.getDate();
@@ -17,7 +18,7 @@ function startChannel(name){
 
     function setupChannel() {
         chatChannel.join().then(function(channel) {
-            chatChannel.getMessages().then(function(messages) {
+            chatChannel.getMessages(20).then(function(messages) {
               var totalMessages = messages.length;
               for (i=0; i<messages.length; i++) {
                 var message = messages[i];
